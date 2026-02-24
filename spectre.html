@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spectre</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      color: #00ff41;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Darker overlay background */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9));
+      z-index: -3;
+    }
+
+    /* Darker grid overlay with visible glitch animation */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: 
+        linear-gradient(rgba(0,255,0,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,0,0.02) 1px, transparent 1px);
+      background-size: 64px 64px;
+      z-index: -2;
+      animation: gridGlitch 8s infinite;
+    }
+
+    @keyframes gridGlitch {
+      0%, 92%, 100% {
+        transform: none;
+        opacity: 1;
+      }
+      93% {
+        transform: translateX(-20px) skewX(10deg) scaleX(1.2);
+        opacity: 0.8;
+      }
+      94% {
+        transform: translateX(15px) skewX(-8deg) scaleX(0.9);
+        opacity: 0.6;
+      }
+      95% {
+        transform: translateX(-10px) skewX(5deg) scaleX(1.1);
+        opacity: 0.7;
+      }
+      96% {
+        transform: translateX(5px) skewX(-5deg);
+        opacity: 0.9;
+      }
+      97% {
+        transform: translateX(-3px);
+        opacity: 1;
+      }
+    }
+
+    /* Canvas for network particles */
+    #network-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .title {
+      font-size: 2rem;
+      text-shadow: 0 0 15px #00ff41;
+    }
+
+    .typewrite {
+      color: #00ff8c;
+      text-shadow: 0 0 15px #00ff8c;
+    }
+
+    .bio {
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+
+    .search-container {
+      margin-top: 20px;
+      position: relative;
+    }
+
+    .searchbar-input {
+      width: 350px;
+      padding: 12px 15px;
+      border: 2px solid #00ff41;
+      background: rgba(0, 0, 0, 0.6);
+      color: #00ff41;
+      font-size: 1rem;
+      border-radius: 30px; 
+      outline: none;
+      box-shadow: 0 0 10px #00ff41;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .searchbar-input::placeholder {
+      color: #00ff4199;
+      transition: color 0.3s ease-in-out;
+    }
+
+    .searchbar-input:hover {
+      background: rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 15px #00ff41, 0 0 30px #003300;
+    }
+
+    .searchbar-input:focus {
+      background: rgba(10, 30, 10, 0.9);
+      box-shadow: 0 0 20px #00ff41, 0 0 40px #003300;
+      transform: scale(1.05);
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 10px #00ff41; }
+      50% { box-shadow: 0 0 20px #00ff41; }
+      100% { box-shadow: 0 0 10px #00ff41; }
+    }
+
+    .proxy-link {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #00ff41;
+      background: #0a1a0a;
+      border: 2px solid #00ff41;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      text-align: center;
+    }
+
+    .proxy-link:hover {
+      background: #00ff41;
+      color: #000;
+      box-shadow: 0 0 15px #00ff41;
+    }
+
+    .proxy-link:active {
+      background: #008f11;
+      box-shadow: 0 0 10px #008f11;
+    }
+  </style>
+</head>
+<body>
+  <!-- Canvas for network particles -->
+  <canvas id="network-bg"></canvas>
+
+  <div class="title">
+    Welcome to
+    <span style="cursor: text">
+      <span class="typewrite" data-period="2000" data-type='["Spectre.","sci-fi.","sleek.", "speedy.", "privacy.", "modern.", "NullCloud.", "the Web."]'>
+      </span>
+    </span>
+  </div>
+  
+  <div class="bio">A sleek and modern web interface</div>
+  
+  <div class="search-container">
+    <form id="uv-form">
+      <input id="uv-address" type="text" class="searchbar-input" 
+        maxlength="2048" title="Search" role="combobox" placeholder="Enter a URL or Search Query" required/>
+    </form>
+  </div>
+  <br><br>
+  <div class="credits">Made with pride in Australia</div>
+
+  <script src="/@/uv.bundle.js"></script>
+  <script src="/@/uv.config.js"></script>
+  <script src="index.js"></script>
+  <script src="main.js"></script>
+
+  <!-- Network particles script -->
+  <script>
+    const canvas = document.getElementById('network-bg');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let points = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      points = [];
+      for (let i = 0; i < 80; i++) { // slightly denser particles
+        points.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5
+        });
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = 'rgba(0,255,65,0.7)';
+      points.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const dx = points[i].x - points[j].x;
+          const dy = points[i].y - points[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.strokeStyle = 'rgba(0,255,65,0.2)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+    </script>
+    <script src="https://replit-cdn.com/replit-pill/replit-pill.global.js" data-referral-code="ovzaqau4q00a" data-repl-id="a8f770fe-2345-49c9-8789-ebde6fcf392b"></script></body>
+    </html>

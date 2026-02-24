@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolSearch | Powered By Solar Panels</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+        
+        body {
+            background-color: #0f0f1a;
+            background-image: 
+                linear-gradient(rgba(255, 140, 0, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 140, 0, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            color: #ff8c00;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Perspective grid effect */
+        body::before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(transparent 0%, rgba(15, 15, 26, 1) 50%),
+                linear-gradient(rgba(255, 140, 0, 0.2) 2px, transparent 2px),
+                linear-gradient(90deg, rgba(255, 140, 0, 0.2) 2px, transparent 2px);
+            background-size: 100% 100%, 60px 60px, 60px 60px;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: bottom;
+            z-index: -1;
+            animation: gridMove 2s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0; }
+            to { background-position: 0 60px; }
+        }
+
+        .sun-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: -40px;
+            z-index: 1;
+        }
+
+        .sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ffcc00 20%, #ff8c00 60%, #ff4500 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 50px #ff8c00, 0 0 100px #ff4500;
+            animation: sunPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); box-shadow: 0 0 50px #ff8c00, 0 0 100px #ff4500; }
+            50% { transform: translate(-50%, -50%) scale(1.1); box-shadow: 0 0 70px #ffcc00, 0 0 130px #ff8c00; }
+        }
+
+        .ray {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2000px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255, 140, 0, 0.8), transparent);
+            transform-origin: left center;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            animation: rayFlash 3s linear infinite;
+        }
+
+        @keyframes rayFlash {
+            0% { transform: rotate(var(--angle)) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: rotate(var(--angle)) translateX(1000px); opacity: 0; }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px #ff8c00;
+            margin-top: 20px;
+            z-index: 2;
+        }
+
+        .typewrite {
+            color: #ffcc00;
+            text-shadow: 0 0 15px #ffcc00;
+        }
+        
+        .bio {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: rgba(255, 140, 0, 0.8);
+            z-index: 2;
+        }
+        
+        .search-container {
+            margin-top: 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .searchbar-input {
+            width: 400px;
+            padding: 15px 20px;
+            border: 2px solid #ff8c00;
+            background: rgba(15, 15, 26, 0.8);
+            color: #ffcc00;
+            font-size: 1.1rem;
+            border-radius: 30px; 
+            outline: none;
+            box-shadow: 0 0 15px #ff8c00;
+            transition: all 0.3s ease-in-out;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .searchbar-input::placeholder {
+            color: rgba(255, 204, 0, 0.5);
+        }
+
+        .searchbar-input:hover {
+            box-shadow: 0 0 25px #ffcc00;
+            background: rgba(15, 15, 26, 0.9);
+        }
+
+        .searchbar-input:focus {
+            box-shadow: 0 0 35px #ffcc00, 0 0 10px #ff4500;
+            transform: scale(1.02);
+        }
+
+        .credits {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: rgba(255, 140, 0, 0.5);
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="sun-container">
+        <div class="sun"></div>
+        <!-- Rays will be injected by JS -->
+    </div>
+
+    <div class="title">
+        Welcome to
+        <span style="cursor: text">
+            <span class="typewrite" data-period="2000" data-type='["SolSearch.","the web.","your future.", "the next generation.", "power."]'>
+            </span>
+        </span>
+    </div>
+    
+    <div class="bio">A sleek and modern web proxy interface with a solar aesthetic.</div>
+    
+    <div class="search-container">
+        <form id="uv-form">
+            <input id="uv-address" type="text" class="searchbar-input" 
+                maxlength="2048" title="Search" role="combobox" placeholder="Enter a URL or Search Query" required/>
+        </form>
+    </div>
+    
+    <div class="credits">Powered by solar panels</div>
+    <div class="credits">Made in China</div>
+
+    <script>
+        // Create rays
+        const sunContainer = document.querySelector('.sun-container');
+        for (let i = 0; i < 12; i++) {
+            const ray = document.createElement('div');
+            ray.className = 'ray';
+            const angle = (i * 30) + (Math.random() * 10);
+            ray.style.setProperty('--angle', `${angle}deg`);
+            ray.style.animationDelay = `${Math.random() * 3}s`;
+            sunContainer.appendChild(ray);
+        }
+    </script>
+    <script src="/@/uv.bundle.js"></script>
+    <script src="/@/uv.config.js"></script>
+    <script src="index.js"></script>
+    <script src="main.js"></script>
+<script src="https://replit-cdn.com/replit-pill/replit-pill.global.js" data-referral-code="8m8ufozkvajb" data-repl-id="20621061-715e-4176-93eb-0f51e83a484c"></script></body>
+</html>

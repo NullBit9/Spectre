@@ -14,7 +14,7 @@
  
  ```sh
  git clone https://github.com/NullBit9/Spectre
- cd spectrev1
+ cd Spectre
  npm i && npm start
  ```
  ## Requirements:

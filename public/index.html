@@ -3,30 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spectre Proxy</title>
+    <title>Spectre - NullCloud</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
         
         body {
-            background: radial-gradient(circle, #1a1a2e, #0f0f1a);
-            color: #d0aaff;
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
+            margin: 0;
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff41;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.9));
+            z-index: -3;
         }
         
+        body::after {
+            content: "";
+             position: fixed;
+            inset: 0;
+            background: 
+             linear-gradient(rgba(0,255,0,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,255,0,0.02) 1px, transparent 1px);
+            background-size: 64px 64px;
+            z-index: -2;
+            animation: gridGlitch 8s infinite;
+        }
+
+        @keyframes gridGlitch {
+          0%, 92%, 100% {
+            transform: none;
+            opacity: 1;
+          }
+          93% {
+            transform: translateX(-20px) skewX(10deg) scaleX(1.2);
+            opacity: 0.8;
+          }
+          94% {
+            transform: translateX(15px) skewX(-8deg) scaleX(0.9);
+            opacity: 0.6;
+          }
+          95% {
+            transform: translateX(-10px) skewX(5deg) scaleX(1.1);
+            opacity: 0.7;
+          }
+          96% {
+            transform: translateX(5px) skewX(-5deg);
+            opacity: 0.9;
+          }
+          97% {
+            transform: translateX(-3px);
+            opacity: 1;
+          }
+        }
+
+        #network-bg {
+          position: fixed;
+          inset: 0;
+          z-index: -1;
+        }
+
         .title {
             font-size: 2rem;
-            text-shadow: 0 0 15px #a020f0;
+            text-shadow: 0 0 15px #00ff41;
         }
 
         .typewrite {
-            color: #ff00ff;
-            text-shadow: 0 0 15px #ff00ff;
+            color: #00ff8c;
+            text-shadow: 0 0 15px #00ff8c;
         }
         
         .bio {
@@ -40,38 +94,39 @@
         }
 
         .searchbar-input {
-            width: 350px;
-            padding: 12px 15px;
-            border: 2px solid #a020f0;
-            background: rgba(0, 0, 0, 0.6);
-            color: #d0aaff;
-            font-size: 1rem;
-            border-radius: 30px; 
-            outline: none;
-            box-shadow: 0 0 10px #a020f0;
-            transition: all 0.3s ease-in-out;
+          width: 350px;
+          padding: 12px 15px;
+          border: 2px solid #00ff41;
+          background: rgba(0, 0, 0, 0.6);
+          color: #00ff41;
+          font-size: 1rem;
+          border-radius: 30px; 
+          outline: none;
+          box-shadow: 0 0 10px #00ff41;
+          transition: all 0.3s ease-in-out;
         }
 
         .searchbar-input::placeholder {
-            color: #d0aaff99;
+            color: #00ff4199;
             transition: color 0.3s ease-in-out;
         }
 
         .searchbar-input:hover {
             background: rgba(0, 0, 0, 0.8);
-            box-shadow: 0 0 15px #ff00ff, 0 0 30px #a020f0;
+            box-shadow: 0 0 15px #00ff41, 0 0 30px #003300;
         }
 
         .searchbar-input:focus {
-            background: rgba(20, 20, 50, 0.9);
-            box-shadow: 0 0 20px #ff00ff, 0 0 40px #a020f0;
-            transform: scale(1.05);
+          background: rgba(10, 30, 10, 0.9);
+          box-shadow: 0 0 20px #00ff41, 0 0 40px #003300;
+          transform: scale(1.05);
+          animation: glow 1.5s infinite alternate;
         }
 
         @keyframes glow {
-            0% { box-shadow: 0 0 10px #a020f0; }
-            50% { box-shadow: 0 0 20px #ff00ff; }
-            100% { box-shadow: 0 0 10px #a020f0; }
+          0% { box-shadow: 0 0 10px #00ff41; }
+          50% { box-shadow: 0 0 20px #00ff41; }
+          100% { box-shadow: 0 0 10px #00ff41; }
         }
 
         .searchbar-input:focus {
@@ -79,42 +134,43 @@
         }
         
         .proxy-link {
-            display: inline-block;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #c084fc;
-            background: #1a1a2e;
-            border: 2px solid #7e22ce;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            text-align: center;
+          display: inline-block;
+          padding: 12px 24px;
+          font-size: 16px;
+          font-weight: bold;
+          text-transform: uppercase;
+          color: #00ff41;
+          background: #0a1a0a;
+          border: 2px solid #00ff41;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+          text-align: center;
         }
 
         .proxy-link:hover {
-            background: #7e22ce;
-            color: #fff;
-            box-shadow: 0 0 15px #7e22ce;
+          background: #00ff41;
+          color: #000;
+          box-shadow: 0 0 15px #00ff41;
         }
 
         .proxy-link:active {
-            background: #5b1599;
-            box-shadow: 0 0 10px #5b1599;
+          background: #008f11;
+          box-shadow: 0 0 10px #008f11;
         }
     </style>
 </head>
 <body>
+  <canvas id="network-bg"></canvas>
     <div class="title">
         Welcome to
         <span style="cursor: text">
-            <span class="typewrite" data-period="2000" data-type='["Spectre.","sci-fi.","sleek.", "speedy.", "privacy."]'>
+            <span class="typewrite" data-period="2000" data-type='["Spectre.","sci-fi.","sleek.", "the web.", "speedy.", "privacy.", "the future."]'>
             </span>
         </span>
     </div>
     
-    <div class="bio">A sleek and modern web proxy interface with a sci-fi aesthetic.</div>
+    <div class="bio">A Modern Web Interface With Ultraviolet</div>
     
     <div class="search-container">
         <form id="uv-form">
@@ -124,13 +180,65 @@
     </div>
     <br>
     <br>
-    <div class="credits">Created by dyamuh.</div>
+    <div class="credits">Made by <a style="color: #00ff41;" href="https://github.com/NullBit9" target="_blank">NullBit</a></div>
     <br>
-    <button class="proxy-link" data-url="https://discord.com">Discord</button>
-    <br>
-    <button class="proxy-link" data-url="https://youtube.com">Youtube</button>
-</body>
 
+</body>
+  <script>
+    const canvas = document.getElementById('network-bg');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let points = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      points = [];
+      for (let i = 0; i < 80; i++) { // slightly denser particles
+        points.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5
+        });
+      }
+    }
+
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = 'rgba(0,255,65,0.7)';
+  points.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0 || p.x > width) p.vx *= -1;
+    if (p.y < 0 || p.y > height) p.vy *= -1;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  for (let i = 0; i < points.length; i++) {
+    for (let j = i + 1; j < points.length; j++) {
+      const dx = points[i].x - points[j].x;
+      const dy = points[i].y - points[j].y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.strokeStyle = 'rgba(0,255,65,0.2)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(points[i].x, points[i].y);
+        ctx.lineTo(points[j].x, points[j].y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize', resize);
+resize();
+draw();
+</script>
 <script src="/@/uv.bundle.js"></script>
 <script src="/@/uv.config.js"></script>
 <script src="index.js"></script>

@@ -13,7 +13,7 @@
  WILL NOT WORK ON WSL!!
  
  ```sh
- git clone https://github.com/Phantom-Proxies/spectrev1
+ git clone https://github.com/NullBit9/Spectre
  cd spectrev1
  npm i && npm start
  ```
